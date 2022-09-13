@@ -17,7 +17,7 @@ public class MD5Util {
      */
     public static String inputPassToFormPass(String inputPass){
         //增加安全性
-        inputPass = salt.charAt(0) + salt.charAt(3) + inputPass + salt.charAt(7);
+        inputPass = "" +salt.charAt(0) + salt.charAt(3) + inputPass + salt.charAt(7);
         return md5(inputPass);
     }
 
@@ -28,13 +28,19 @@ public class MD5Util {
      * @return
      */
     public static String formPassTODbPass(String formPass, String salt){
-        formPass = salt.charAt(0) + salt.charAt(3) + formPass + salt.charAt(7);
+        formPass = "" +salt.charAt(0) + salt.charAt(3) + formPass + salt.charAt(7);
         return md5(formPass);
     }
 
-    public static String inputPassToDbPass(String inputPass){
+    public static String inputPassToDbPass(String inputPass,String salt){
         String formPass = inputPassToFormPass(inputPass);
-        String dbPass =  formPassTODbPass(formPass,"q7w8a4s5z1x2");
+        String dbPass =  formPassTODbPass(formPass,salt);
         return dbPass;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(inputPassToFormPass("123456"));
+        System.out.println(formPassTODbPass("ef963bed3ad24f34feaec0b8a26317f6","q7w8a4s5z1x2"));
+        System.out.println(inputPassToDbPass("123456","q7w8a4s5z1x2"));
     }
 }
