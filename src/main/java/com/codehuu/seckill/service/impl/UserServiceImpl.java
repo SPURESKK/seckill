@@ -1,5 +1,6 @@
 package com.codehuu.seckill.service.impl;
 
+import com.codehuu.seckill.exception.GlobalException;
 import com.codehuu.seckill.pojo.User;
 import com.codehuu.seckill.mapper.UserMapper;
 import com.codehuu.seckill.service.IUserService;
@@ -32,12 +33,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         User user = userMapper.selectById(mobile);
         //没有查到用户
         if(user == null){
-            return RespBean.error(RespBeanEnum.LOGIN_ERROR);
+            throw new GlobalException(RespBeanEnum.LOGIN_ERROR);
+//            return RespBean.error(RespBeanEnum.LOGIN_ERROR);
         }
 
         //密码不匹配
         if(!user.getPassword().equals(MD5Util.formPassTODbPass(password,user.getSlat()))){
-            return RespBean.error(RespBeanEnum.LOGIN_ERROR);
+            throw new GlobalException(RespBeanEnum.LOGIN_ERROR);
+//            return RespBean.error(RespBeanEnum.LOGIN_ERROR);
         }
 
         return RespBean.success();
