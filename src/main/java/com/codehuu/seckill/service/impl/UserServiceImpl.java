@@ -5,7 +5,9 @@ import com.codehuu.seckill.pojo.User;
 import com.codehuu.seckill.mapper.UserMapper;
 import com.codehuu.seckill.service.IUserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.codehuu.seckill.utils.CookieUtil;
 import com.codehuu.seckill.utils.MD5Util;
+import com.codehuu.seckill.utils.UUIDUtil;
 import com.codehuu.seckill.vo.LoginVo;
 import com.codehuu.seckill.vo.RespBean;
 import com.codehuu.seckill.vo.RespBeanEnum;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.UUID;
 
 /**
  * <p>
@@ -42,7 +45,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
             throw new GlobalException(RespBeanEnum.LOGIN_ERROR);
 //            return RespBean.error(RespBeanEnum.LOGIN_ERROR);
         }
-
+        //登录成功生成cookie
+        String ticket = UUIDUtil.uuid();
+        request.getSession().setAttribute(ticket,user);
+        CookieUtil.setCookie(request,response,"userTicket",ticket);
         return RespBean.success();
     }
 }
