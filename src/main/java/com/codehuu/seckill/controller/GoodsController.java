@@ -1,23 +1,33 @@
 package com.codehuu.seckill.controller;
 
 import com.codehuu.seckill.pojo.User;
+import com.codehuu.seckill.service.IUserService;
+import com.sun.deploy.net.HttpResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.thymeleaf.util.StringUtils;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/goods")
 public class GoodsController {
+    @Autowired
+    IUserService iUserService;
     @RequestMapping("/toList")
-    public String toList(HttpSession session, Model model, @CookieValue("userTicket") String ticket){
+    public String toList(HttpServletRequest httpRequest, HttpServletResponse httpResponse, Model model, @CookieValue("userTicket") String ticket){
         if(StringUtils.isEmpty(ticket)){
             return "login";
         }
-        User user = (User) session.getAttribute(ticket);
+//        User user = (User) session.getAttribute(ticket);
+        //用户信息改为从redis获取
+        User user = iUserService.getUserByCookie(httpRequest, httpResponse ,ticket);
         if(null == user){
             return "login";
         }
