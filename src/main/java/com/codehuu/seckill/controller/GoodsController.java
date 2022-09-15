@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.thymeleaf.util.StringUtils;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -20,17 +21,15 @@ import javax.servlet.http.HttpSession;
 public class GoodsController {
     @Autowired
     IUserService iUserService;
+
+    /**
+     * User类的传入由WebConfig类完成
+     * @param model
+     * @param user
+     * @return
+     */
     @RequestMapping("/toList")
-    public String toList(HttpServletRequest httpRequest, HttpServletResponse httpResponse, Model model, @CookieValue("userTicket") String ticket){
-        if(StringUtils.isEmpty(ticket)){
-            return "login";
-        }
-//        User user = (User) session.getAttribute(ticket);
-        //用户信息改为从redis获取
-        User user = iUserService.getUserByCookie(httpRequest, httpResponse ,ticket);
-        if(null == user){
-            return "login";
-        }
+    public String toList(Model model, User user){
         //返回前端User
         model.addAttribute("user",user);
         return "goodsList";
