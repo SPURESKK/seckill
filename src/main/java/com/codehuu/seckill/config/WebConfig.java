@@ -14,10 +14,12 @@ import java.util.List;
 public class WebConfig implements WebMvcConfigurer {
     @Autowired
     private UserArgumentResolver argumentResolver;
+
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
         resolvers.add(argumentResolver);
     }
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/**").addResourceLocations("classpath:/static/");
