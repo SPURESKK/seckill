@@ -2,6 +2,9 @@ package com.codehuu.seckill.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.codehuu.seckill.pojo.Goods;
+import com.codehuu.seckill.vo.GoodsVo;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,7 @@ import com.codehuu.seckill.pojo.Goods;
  */
 public interface IGoodsService extends IService<Goods> {
 
+    List<GoodsVo> findGoodsVo();
+
+    GoodsVo findGoodsVoByGoodsId(Long goodsId);
 }
