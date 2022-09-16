@@ -20,9 +20,10 @@ import javax.servlet.http.HttpServletResponse;
 public class UserArgumentResolver implements HandlerMethodArgumentResolver {
     @Autowired
     private IUserService userService;
+
     @Override
     public boolean supportsParameter(MethodParameter methodParameter) {
-        Class<?> clazz = methodParameter.getClass();
+        Class<?> clazz = methodParameter.getParameterType();
         //判断参数类是否为User类
         return clazz == User.class;
     }
@@ -31,13 +32,13 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
     public Object resolveArgument(MethodParameter methodParameter, ModelAndViewContainer modelAndViewContainer, NativeWebRequest nativeWebRequest, WebDataBinderFactory webDataBinderFactory) throws Exception {
         HttpServletRequest nativeRequest = nativeWebRequest.getNativeRequest(HttpServletRequest.class);
         HttpServletResponse nativeResponse = nativeWebRequest.getNativeResponse(HttpServletResponse.class);
-        String ticket = CookieUtil.getCookieValue(nativeRequest,"userTicket");
-        if(StringUtils.isEmpty(ticket)){
+        String ticket = CookieUtil.getCookieValue(nativeRequest, "userTicket");
+        if (StringUtils.isEmpty(ticket)) {
             return null;
         }
 //        User user = (User) session.getAttribute(ticket);
         //用户信息改为从redis获取
-        User user = userService.getUserByCookie(nativeRequest, nativeResponse ,ticket);
+        User user = userService.getUserByCookie(nativeRequest, nativeResponse, ticket);
         return user;
     }
 }
